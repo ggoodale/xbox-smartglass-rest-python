@@ -33,7 +33,11 @@ class ConsoleWrap(object):
     @staticmethod
     def power_on(liveid):
         for i in range(3):
-            Console.power_on(liveid, tries=10)
+            if os.environ['XBOX_IP']:
+                Console.power_on(liveid, os.environ['XBOX_IP'], tries=10)
+            else:
+                Console.power_on(liveid, tries=10)
+
             Console.wait(1)
 
     @property
