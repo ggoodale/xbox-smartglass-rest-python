@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 from functools import wraps
+import os
 
 import xbox.rest
 from xbox.rest.scripts import TOKENS_FILE
@@ -24,7 +25,10 @@ class ConsoleWrap(object):
 
     @staticmethod
     def discover():
-        return Console.discover()
+        if os.environ['XBOX_IP']:
+            return Console.discover(os.environ['XBOX_IP'])
+        else:
+            return Console.discover()
 
     @staticmethod
     def power_on(liveid):
