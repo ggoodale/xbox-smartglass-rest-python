@@ -85,3 +85,12 @@ dist: clean ## builds source and wheel package
 
 install: clean ## install the package to the active Python's site-packages
 	python setup.py install
+
+docker-build:
+	docker build . -f Dockerfile.amd64 -t xbox-smartglass-rest-python
+
+docker-build-arm:
+	docker build . -f Dockerfile.arm32v6 -t xbox-smartglass-rest-python
+
+docker-run:
+	docker run -e XBOX_IP=192.168.2.5 -p 5557:5557 xbox-smartglass-rest-python
