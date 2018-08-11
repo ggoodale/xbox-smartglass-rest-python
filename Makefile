@@ -90,7 +90,10 @@ docker-build:
 	docker build . -f Dockerfile.amd64 -t xbox-smartglass-rest-python
 
 docker-build-arm:
-	docker build . -f Dockerfile.arm32v6 -t xbox-smartglass-rest-python
+	docker build . -f Dockerfile.arm32v6 -t xbox-smartglass-rest-python:arm64
 
 docker-run:
 	docker run -e XBOX_IP=192.168.2.5 -p 5557:5557 xbox-smartglass-rest-python
+
+docker-run-arm:
+	docker run -e XBOX_IP=192.168.2.5 -p 5557:5557 xbox-smartglass-rest-python:arm64

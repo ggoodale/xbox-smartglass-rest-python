@@ -247,11 +247,13 @@ class ConsoleWrap(object):
             return enum.ConnectionState.Disconnected
         elif self.console.connected:
             return enum.ConnectionState.Connected
+        elif self.anonymous_connection_allowed == True:
+            state = self.console.connect()
         elif not authentication_mgr.xsts_token:
             raise Exception('No authentication tokens available, please authenticate!')
-
-        state = self.console.connect(userhash=authentication_mgr.userinfo.userhash,
-                                     xsts_token=authentication_mgr.xsts_token.jwt)
+        else:
+            state = self.console.connect(userhash=authentication_mgr.userinfo.userhash,
+                                         xsts_token=authentication_mgr.xsts_token.jwt)
 
         if state == enum.ConnectionState.Connected:
             self.console.wait(0.5)
