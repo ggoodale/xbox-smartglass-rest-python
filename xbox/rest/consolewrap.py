@@ -17,8 +17,8 @@ class ConsoleWrap(object):
             self.console.add_manager(StumpManager)
 
     @staticmethod
-    def discover():
-        return Console.discover()
+    def discover(addr=False):
+        return Console.discover(addr)
 
     @staticmethod
     def power_on(liveid):
