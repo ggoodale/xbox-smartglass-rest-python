@@ -97,3 +97,11 @@ docker-run:
 
 docker-run-arm:
 	docker run -e XBOX_IP=192.168.2.5 -p 5557:5557 xbox-smartglass-rest-python:develop-arm
+
+
+
+docker-build-cross:
+	docker build . -f Dockerfile -t xbox-smartglass-rest-python:cross-platform
+
+docker-run-cross:
+	docker run -e XBOX_IP=192.168.2.5 -p 5557:5557 -e XBOX_IP=192.168.2.5 xbox-smartglass-rest-python:cross-platform

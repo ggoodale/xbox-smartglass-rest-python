@@ -17,8 +17,8 @@ class ConsoleWrap(object):
             self.console.add_manager(StumpManager)
 
     @staticmethod
-    def discover():
-        return Console.discover()
+    def discover(addr=False):
+        return Console.discover(addr)
 
     @staticmethod
     def power_on(liveid):
@@ -163,8 +163,8 @@ class ConsoleWrap(object):
         media_state = self.console.media.media_state
 
         # Ensure we are in the same app, otherwise this is useless
-        if media_state.aum_id not in [t.aum for t in self.console.console_status.active_titles]:
-            return None
+        #if media_state.aum_id not in [t.aum for t in self.console.console_status.active_titles]:
+        #    return None
 
         media_state_json = {
             'title_id': media_state.title_id,

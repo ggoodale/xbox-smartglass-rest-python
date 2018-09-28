@@ -31,6 +31,31 @@ def device_overview():
     data = {console.liveid: console.status for console in app.console_cache.values()}
     return app.success(devices=data)
 
+@routes.route('/discover/<ip>')
+def device_discover(ip):
+    discovered = ConsoleWrap.discover(addr=ip).copy()
+
+    liveids = [d.liveid for d in discovered]
+    for i, c in enumerate(app.console_cache.values()):
+        if c.liveid in liveids:
+            # Refresh existing entries
+            index = liveids.index(c.liveid)
+
+            if c.device_status != discovered[index].device_status:
+                app.console_cache[c.liveid] = ConsoleWrap(discovered[index])
+            del discovered[index]
+            del liveids[index]
+        elif c.liveid not in liveids:
+            # Set unresponsive consoles to Unavailable
+            app.console_cache[c.liveid].console.device_status = enum.DeviceStatus.Unavailable
+
+    # Extend by new entries
+    for d in discovered:
+        app.console_cache.update({d.liveid: ConsoleWrap(d)})
+
+    data = {console.liveid: console.status for console in app.console_cache.values()}
+    return app.success(devices=data)
+
 
 @routes.route('/device/<liveid>/poweron')
 def poweron(liveid):
