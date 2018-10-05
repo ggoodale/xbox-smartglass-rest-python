@@ -8,7 +8,6 @@ COPY . .
 RUN pip install -e ./
 
 EXPOSE 5557/tcp
-ENV XBOX_IP False
 
 RUN [ "cross-build-end" ]
 CMD [ "xbox-rest-server" ]
