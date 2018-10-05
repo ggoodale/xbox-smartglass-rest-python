@@ -8,32 +8,8 @@ from . import routes
 
 @routes.route('/device')
 def device_overview():
-    discovered = ConsoleWrap.discover().copy()
-
-    liveids = [d.liveid for d in discovered]
-    for i, c in enumerate(app.console_cache.values()):
-        if c.liveid in liveids:
-            # Refresh existing entries
-            index = liveids.index(c.liveid)
-
-            if c.device_status != discovered[index].device_status:
-                app.console_cache[c.liveid] = ConsoleWrap(discovered[index])
-            del discovered[index]
-            del liveids[index]
-        elif c.liveid not in liveids:
-            # Set unresponsive consoles to Unavailable
-            app.console_cache[c.liveid].console.device_status = enum.DeviceStatus.Unavailable
-
-    # Extend by new entries
-    for d in discovered:
-        app.console_cache.update({d.liveid: ConsoleWrap(d)})
-
-    data = {console.liveid: console.status for console in app.console_cache.values()}
-    return app.success(devices=data)
-
-@routes.route('/discover/<ip>')
-def device_discover(ip):
-    discovered = ConsoleWrap.discover(addr=ip).copy()
+    addr = request.args.get('addr')
+    discovered = ConsoleWrap.discover(addr=addr).copy()
 
     liveids = [d.liveid for d in discovered]
     for i, c in enumerate(app.console_cache.values()):
@@ -301,7 +277,7 @@ def gamedvr_record(console):
 
     return app.success()
 
-"""
+
 @routes.route('/device/<liveid>/nano')
 @console_connected
 def nano_overview(console):
@@ -320,4 +296,3 @@ def nano_start(console):
 def nano_stop(console):
     console.nano_stop()
     return app.success()
-"""

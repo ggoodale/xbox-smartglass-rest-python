@@ -1,7 +1,11 @@
+import logging
+
 from xbox.sg import enum
 from xbox.sg.console import Console
 from xbox.sg.manager import InputManager, TextManager, MediaManager
 from xbox.stump.manager import StumpManager
+
+log = logging.getLogger()
 
 class ConsoleWrap(object):
     def __init__(self, console):
@@ -16,9 +20,19 @@ class ConsoleWrap(object):
         if 'stump' not in self.console.managers:
             self.console.add_manager(StumpManager)
 
+        try:
+            from xbox.nano.manager import NanoManager
+            if 'nano' not in self.console.managers:
+                self.console.add_manager(NanoManager)
+        except ImportError:
+            log.warning(
+                'Failed to import NanoManager (depends on xbox-smartglass-nano).'
+                ' /nano endpoint will not work!'
+            )
+
     @staticmethod
-    def discover(addr=False):
-        return Console.discover(addr)
+    def discover(*args, **kwargs):
+        return Console.discover(*args, **kwargs)
 
     @staticmethod
     def power_on(liveid):
@@ -163,8 +177,8 @@ class ConsoleWrap(object):
         media_state = self.console.media.media_state
 
         # Ensure we are in the same app, otherwise this is useless
-        #if media_state.aum_id not in [t.aum for t in self.console.console_status.active_titles]:
-        #    return None
+        if media_state.aum_id not in [t.aum for t in self.console.console_status.active_titles]:
+            return None
 
         media_state_json = {
             'title_id': media_state.title_id,
@@ -244,7 +258,7 @@ class ConsoleWrap(object):
             'session_id': nano.session_id,
             'stream_can_be_enabled': nano.stream_can_be_enabled,
             'stream_enabled': nano.stream_enabled,
-            'stream_state': nano.stream_state,
+            'stream_state': nano.stream_state.name.lower(),
             'transmit_linkspeed': nano.transmit_linkspeed,
             'wireless': nano.wireless,
             'wireless_channel': nano.wireless_channel,
