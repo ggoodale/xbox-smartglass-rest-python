@@ -35,9 +35,9 @@ class ConsoleWrap(object):
         return Console.discover(*args, **kwargs)
 
     @staticmethod
-    def power_on(liveid):
+    def power_on(liveid, addr=None):
         for i in range(3):
-            Console.power_on(liveid, tries=10)
+            Console.power_on(liveid, addr=addr, tries=10)
             Console.wait(1)
 
     @property
@@ -85,6 +85,10 @@ class ConsoleWrap(object):
     @property
     def liveid(self):
         return self.console.liveid
+
+    @property
+    def last_error(self):
+        return self.console.last_error
 
     @property
     def available(self):
@@ -211,6 +215,7 @@ class ConsoleWrap(object):
             'connection_state': self.connection_state.name,
             'pairing_state': self.pairing_state.name,
             'device_status': self.device_status.name,
+            'last_error': self.last_error,
             'authenticated_users_allowed': self.authenticated_users_allowed,
             'console_users_allowed': self.console_users_allowed,
             'anonymous_connection_allowed': self.anonymous_connection_allowed,
@@ -300,10 +305,10 @@ class ConsoleWrap(object):
         print(result)
         return True
 
-    def send_media_command(self, command):
+    def send_media_command(self, command, seek_position=None):
         title_id = 0
         request_id = 0
-        self.console.media_command(title_id, command, request_id)
+        self.console.media_command(title_id, command, request_id, seek_position)
         return True
 
     def send_gamepad_button(self, btn):
