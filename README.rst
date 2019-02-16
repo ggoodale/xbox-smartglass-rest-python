@@ -9,6 +9,10 @@ Xbox-Smartglass-REST
 .. image:: https://travis-ci.com/OpenXbox/xbox-smartglass-rest-python.svg?branch=master
     :target: https://travis-ci.com/OpenXbox/xbox-smartglass-rest-python
 
+.. image:: https://img.shields.io/docker/build/openxbox/xbox-smartglass-rest.svg
+    :target: https://hub.docker.com/r/openxbox/xbox-smartglass-rest
+    :alt: Docker Build Status
+
 .. image:: https://img.shields.io/badge/discord-OpenXbox-blue.svg
     :target: https://discord.gg/E8kkJhQ
     :alt: Discord chat channel
@@ -91,6 +95,7 @@ Usual usage:
 
     # (Optional) Poweron console
     http://localhost:5557/device/<liveid>/poweron
+    # NOTE: You can specify device by ip: /device/<liveid>/poweron?addr=192.168.0.123
     # Enumerate devices on network
     # NOTE: You can enumerate device by specific ip: /device?addr=192.168.0.123
     http://localhost:5557/device

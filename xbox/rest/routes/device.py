@@ -29,13 +29,16 @@ def device_overview():
     for d in discovered:
         app.console_cache.update({d.liveid: ConsoleWrap(d)})
 
-    data = {console.liveid: console.status for console in app.console_cache.values()}
+    # Filter for specific console when ip address query is supplied (if available)
+    data = {console.liveid: console.status for console in app.console_cache.values()
+                if (addr and console.status.get('address') == addr) or not addr}
     return app.success(devices=data)
 
 
 @routes.route('/device/<liveid>/poweron')
 def poweron(liveid):
-    ConsoleWrap.power_on(liveid)
+    addr = request.args.get('addr')
+    ConsoleWrap.power_on(liveid, addr=addr)
     return app.success()
 
 
