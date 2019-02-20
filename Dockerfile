@@ -10,5 +10,4 @@ COPY . .
 RUN pip install -e ./
 
 ENV XBOX_IP False
-RUN ["xbox-auth-via-browser"]
 CMD ["xbox-rest-server"]
